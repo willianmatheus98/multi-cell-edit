@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Teste</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.js"></script>
+
+    <style type="text/css">
+        .selected {
+            background-color: #369;
+        }
+
+        .edited {
+            background-color: #ffff56;
+        }
+
+        .selected.edited {
+            background-color: #5793ff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Editar
+        </div>
+        <div class="content">
+            <div class="ui pointing secondary menu">
+                <a class="item active" data-tab="valor">Valor</a>
+                <a class="item" data-tab="percentual">Percentual %</a>
+            </div>
+            <div class="ui bottom attached tab segment active" data-tab="valor">
+                <div class="description">
+                    <div class="ui header">Informe um valor para as células selecionadas</div>
+                    <p>Exemplo:</p>
+                    <p>Se informar 12,47, as células ficarão com R$ 12,47</p>
+                </div>
+
+                <div style="margin-top: 10px;" class="ui input">
+                    <input type="number" pattern="[0-9]+([\.,][0-9]+)?" placeholder="Valor" id="valor" />
+                </div>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="percentual">
+                <div class="description">
+                    <div class="ui header">Informe um percentual de desconto</div>
+                    <p>Exemplos:</p>
+                    <p>Para aumentar em 10%, informe 10,00</p>
+                    <p>Para dar um desconto de 10%, informe -10,00 </p>
+                </div>
+
+                <div style="margin-top: 10px;" class="ui input">
+                    <input type="number" pattern="[0-9]+([\.,][0-9]+)?" placeholder="Percentual%" id="percentual" />
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <div class="ui black deny button">
+                Cancelar
+            </div>
+            <div class="ui positive right labeled icon button" id="editConfirm">
+                Confirmar
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="ui button" id="editBtn">Editar</div>
+    <div class="ui button" id="verJson">Ver JSON</div>
+    <div class="ui button" id="deselectAll">Deselecionar tudo</div>
+    <div class="ui button" id="selectAll">Selecionar tudo</div>
+
+    <table id="tabelao" class="ui celled table">
+        <thead id="cabecalhoTabela">
+            <tr>
+                <th id="indice">Indice</th>
+                <th id="coluna2" clicked="false">coluna2</th>
+                <th id="coluna3" clicked="false">coluna3</th>
+                <th id="coluna4" class="columnSelectable" clicked="false">coluna4</th>
+                <th id="coluna5" class="columnSelectable" clicked="false">coluna5</th>
+                <th id="coluna6" class="columnSelectable" clicked="false">coluna6</th>
+                <th id="coluna7" class="columnSelectable" clicked="false">coluna7</th>
+                <th id="coluna8" class="columnSelectable" clicked="false">coluna8</th>
+                <th id="coluna4coluna7" clicked="false">coluna4 coluna7</th>
+                <th id="coluna4coluna8" clicked="false">coluna4 com coluna8</th>
+                <th id="coluna4coluna8coluna7" clicked="false">coluna4 + coluna8 + coluna7</th>
+            </tr>
+        </thead>
+        <tbody id="corpoTabela">
+
+            <tr id="1">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="2">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="3">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="4">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="5">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="6">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="7">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="8">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="9">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="10">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+            <tr id="11">
+                <td class="indice notSelectable" clicked="false">1</td>
+                <td class="coluna2 notSelectable">texto 1</td>
+                <td class="coluna3 notSelectable">texto 2</td>
+                <td class="coluna4">R$ 10,00</td>
+                <td class="coluna5">R$ 11,00</td>
+                <td class="coluna6">R$ 12,00</td>
+                <td class="coluna7">R$ 13,00</td>
+                <td class="coluna8">R$ 14,00</td>
+                <td class="coluna4coluna7 notSelectable">R$ 15,00</td>
+                <td class="coluna4coluna8 notSelectable">R$ 16,00</td>
+                <td class="coluna4coluna8coluna7 notSelectable">R$ 17,00</td>
+            </tr>
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Indice</th>
+                <th>coluna2</th>
+                <th>coluna3</th>
+                <th>coluna4</th>
+                <th>coluna5</th>
+                <th>coluna6</th>
+                <th>coluna7</th>
+                <th>coluna8</th>
+                <th>coluna4 coluna7</th>
+                <th>coluna4 com coluna8</th>
+                <th>coluna4 + coluna8 + coluna7</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <script type="text/javascript">
+        $('.menu .item')
+            .tab();
+
+
+        function selectOrDeselect(selectorFather, selector) {
+            if (!selector.hasClass("notSelectable")) {
+                if (selectorFather.attr("clicked") == "true") {
+                    $(selector).removeClass("selected");
+                } else {
+                    $(selector).addClass("selected");
+                }
+            }
+        }
+
+        function selectOrDeselectCell(selector) {
+            if (!selector.hasClass("notSelectable")) {
+                if (selector.hasClass("selected")) {
+                    $(selector).removeClass("selected");
+                } else {
+                    $(selector).addClass("selected");
+                }
+            }
+        }
+
+        $("#cabecalhoTabela tr th.columnSelectable").click(function() {
+
+
+            var coluna = $("." + $(this).attr("id"));
+            coluna.each(function(index, item) {
+
+                selectOrDeselect($(this), $(item));
+
+            });
+
+            if ($(this).attr("clicked") == "true") {
+                $(this).attr("clicked", "false");
+            } else {
+                $(this).attr("clicked", "true");
+            }
+        });
+
+        $("#corpoTabela tr td ").click(function() {
+
+            if (!$(this).hasClass("indice")) {
+
+                selectOrDeselectCell($(this));
+
+            } else {
+                var indice = $(this);
+                indice.parent().children().each(function(index, item) {
+                    if (!$(item).hasClass("indice")) {
+
+                        selectOrDeselect(indice, $(item));
+
+                    }
+                });
+
+                if (indice.attr("clicked") == "true") {
+                    indice.attr("clicked", "false");
+                } else {
+                    indice.attr("clicked", "true");
+                }
+            }
+        });
+
+        $("#editBtn").click(function() {
+            var qtd = $(".selected").length;
+
+            if (qtd == 0) {
+                noty("Selecione alguma célula para poder ser editado", "info");
+                return false;
+            }
+
+            $('.ui.modal').modal('show');
+        });
+
+        $("#verJson").click(function() {
+            console.log(convertTableToJson());
+        });
+
+        $("#deselectAll").click(function() {
+            $("#corpoTabela tr td ").each(function(index, item) {
+                $(item).removeClass("selected");
+            });
+        });
+
+        $("#selectAll").click(function() {
+            $("#corpoTabela tr td ").each(function(index, item) {
+                if (!$(item).hasClass("notSelectable")) {
+                    $(item).addClass("selected");
+                }
+            });
+        });
+
+        function convertTableToJson() {
+            var rows = [];
+            $('#tabelao tbody tr').each(function(index, item) {
+                var $row = $(item);
+                rows.push({
+                    indice: $row.find('td:eq(0)').text(),
+                    coluna2: $row.find('td:eq(1)').text(),
+                    coluna3: $row.find('td:eq(2)').text(),
+                    coluna4: $row.find('td:eq(3)').text(),
+                    coluna5: $row.find('td:eq(4)').text(),
+                    coluna6: $row.find('td:eq(5)').text(),
+                    coluna7: $row.find('td:eq(6)').text(),
+                    coluna8: $row.find('td:eq(7)').text()
+                });
+            });
+            return JSON.stringify(rows);
+        }
+
+        $('#editConfirm').on("click", function() {
+
+            var valorAux;
+
+            if ($(".menu .item.active").attr("data-tab") == "valor") {
+                valorAux = $("#valor").val();
+            } else {
+                valorAux = $("#percentual").val();
+            }
+
+            if (valorAux == "") {
+                noty("Preencha um valor para prosseguir", "info");
+                return false;
+            }
+
+            $(".selected").each(function(index, item) {
+
+                var celula = $(item);
+                var antigoValor = decimalValue(celula.html());
+
+                var novoValor;
+                if ($(".menu .item.active").attr("data-tab") == "valor") {
+                    novoValor = parseFloat(valorAux);
+                } else {
+                    novoValor = parseFloat(antigoValor) + ((parseFloat(valorAux) * parseFloat(antigoValor)) / 100);
+                }
+
+                celula.html(formataDinheiro(novoValor.toFixed(2)));
+                celula.addClass("edited");
+                recalculaSomas(celula.parent());
+            });
+
+        });
+
+        function recalculaSomas(row) {
+
+
+            var coluna4 = parseFloat(decimalValue(row.find('td:eq(3)').text()));
+            var coluna8 = parseFloat(decimalValue(row.find('td:eq(7)').text()));
+            var coluna7 = parseFloat(decimalValue(row.find('td:eq(6)').text()));
+
+
+
+            var coluna4coluna8 = coluna4 + coluna8;
+            var coluna4coluna7 = coluna4 + coluna7;
+            var coluna4coluna8coluna7 = coluna4 + coluna7 + coluna8;
+
+            $("#" + $(row).attr("id") + " .coluna4coluna8").html(formataDinheiro(coluna4coluna8.toFixed(2)));
+            $("#" + $(row).attr("id") + " .coluna4coluna7").html(formataDinheiro(coluna4coluna7.toFixed(2)));
+            $("#" + $(row).attr("id") + " .coluna4coluna8coluna7").html(formataDinheiro(coluna4coluna8coluna7.toFixed(2)));
+        }
+
+        function formataDinheiro(n) {
+            return "R$ " + n.replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+        }
+
+        function decimalValue(n) {
+            n = n.replace('R$ ', '').replace(/\,/g, '').replace(/\./g, '');
+            n = n / 100;
+            return n;
+        }
+
+
+        function noty(message, type) {
+
+            new Noty({
+                theme: 'metroui',
+                text: message,
+                type: type,
+                layout: 'center',
+                timeout: 6000
+            }).show();
+
+        }
+    </script>
+</body>
+
+</html>
